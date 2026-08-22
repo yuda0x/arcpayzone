@@ -1,0 +1,352 @@
+/* Import individual theme files */
+@import './themes/claude.css';
+@import './themes/discord.css';
+@import './themes/supabase.css';
+@import './themes/vercel.css';
+@import './themes/mono.css';
+@import './themes/notebook.css';
+@import './themes/light-green.css';
+@import './themes/zen.css';
+@import './themes/astro-vista.css';
+@import './themes/whatsapp.css';
+
+body {
+  @apply overscroll-none;
+}
+
+img {
+  filter: grayscale(1);
+}
+
+/* ArcPayZone monochrome system. Keep theme mode switching intact while
+   normalizing every application surface to black, white, and gray. */
+:root,
+[data-theme] {
+  --background: oklch(0.96 0 0) !important;
+  --foreground: oklch(0.12 0 0) !important;
+  --card: oklch(1 0 0) !important;
+  --card-foreground: oklch(0 0 0) !important;
+  --popover: oklch(1 0 0) !important;
+  --popover-foreground: oklch(0 0 0) !important;
+  --primary: oklch(0 0 0) !important;
+  --primary-foreground: oklch(1 0 0) !important;
+  --secondary: oklch(0.91 0 0) !important;
+  --secondary-foreground: oklch(0.12 0 0) !important;
+  --muted: oklch(0.91 0 0) !important;
+  --muted-foreground: oklch(0.36 0 0) !important;
+  --accent: oklch(0.86 0 0) !important;
+  --accent-foreground: oklch(0.12 0 0) !important;
+  --destructive: oklch(0.35 0 0) !important;
+  --destructive-foreground: oklch(1 0 0) !important;
+  --border: oklch(0.78 0 0) !important;
+  --input: oklch(0.88 0 0) !important;
+  --ring: oklch(0.12 0 0) !important;
+  --chart-1: oklch(0.12 0 0) !important;
+  --chart-2: oklch(0.3 0 0) !important;
+  --chart-3: oklch(0.5 0 0) !important;
+  --chart-4: oklch(0.7 0 0) !important;
+  --chart-5: oklch(0.88 0 0) !important;
+  --sidebar: var(--background) !important;
+  --sidebar-foreground: oklch(0.12 0 0) !important;
+  --sidebar-primary: oklch(0.12 0 0) !important;
+  --sidebar-primary-foreground: oklch(1 0 0) !important;
+  --sidebar-accent: oklch(0.84 0 0) !important;
+  --sidebar-accent-foreground: oklch(0.12 0 0) !important;
+  --sidebar-border: oklch(0.78 0 0) !important;
+  --sidebar-ring: oklch(0.12 0 0) !important;
+}
+
+[data-theme].dark {
+  --background: oklch(0 0 0) !important;
+  --foreground: oklch(1 0 0) !important;
+  --card: oklch(0.1 0 0) !important;
+  --card-foreground: oklch(1 0 0) !important;
+  --popover: oklch(0.12 0 0) !important;
+  --popover-foreground: oklch(1 0 0) !important;
+  --primary: oklch(1 0 0) !important;
+  --primary-foreground: oklch(0 0 0) !important;
+  --secondary: oklch(0.2 0 0) !important;
+  --secondary-foreground: oklch(1 0 0) !important;
+  --muted: oklch(0.18 0 0) !important;
+  --muted-foreground: oklch(0.72 0 0) !important;
+  --accent: oklch(0.24 0 0) !important;
+  --accent-foreground: oklch(1 0 0) !important;
+  --destructive: oklch(0.75 0 0) !important;
+  --destructive-foreground: oklch(0 0 0) !important;
+  --border: oklch(0.28 0 0) !important;
+  --input: oklch(0.24 0 0) !important;
+  --ring: oklch(0.78 0 0) !important;
+  --sidebar: var(--background) !important;
+  --sidebar-foreground: oklch(1 0 0) !important;
+  --sidebar-primary: oklch(1 0 0) !important;
+  --sidebar-primary-foreground: oklch(0 0 0) !important;
+  --sidebar-accent: oklch(0.22 0 0) !important;
+  --sidebar-accent-foreground: oklch(1 0 0) !important;
+  --sidebar-border: oklch(0.24 0 0) !important;
+  --sidebar-ring: oklch(0.78 0 0) !important;
+}
+
+.payzone-theme [class*='text-gray-'],
+.payzone-theme [class*='text-slate-'] {
+  color: var(--muted-foreground);
+}
+
+.payzone-theme [class*='bg-gray-'],
+.payzone-theme [class*='bg-slate-'] {
+  background-color: var(--muted);
+}
+
+.payzone-theme [class*='border-gray-'],
+.payzone-theme [class*='border-slate-'] {
+  border-color: var(--border);
+}
+
+/* PayZone still contains legacy utility names. Keep their rendering inside
+   the shared semantic system until each tab can be simplified independently. */
+.payzone-theme [class*='text-blue-'],
+.payzone-theme [class*='text-cyan-'],
+.payzone-theme [class*='text-purple-'],
+.payzone-theme [class*='text-violet-'],
+.payzone-theme [class*='text-green-'],
+.payzone-theme [class*='text-red-'],
+.payzone-theme [class*='text-orange-'],
+.payzone-theme [class*='text-yellow-'],
+.payzone-theme [class*='text-pink-'],
+.payzone-theme [class*='text-indigo-'],
+.payzone-theme [class*='text-emerald-'],
+.payzone-theme [class*='text-amber-'],
+.payzone-theme [class*='text-rose-'],
+.payzone-theme [class*='text-lime-'],
+.payzone-theme [class*='text-sky-'],
+.payzone-theme [class*='text-teal-'],
+.payzone-theme [class*='text-fuchsia-'] {
+  color: var(--foreground);
+}
+
+.payzone-theme [class*='bg-blue-'],
+.payzone-theme [class*='bg-cyan-'],
+.payzone-theme [class*='bg-purple-'],
+.payzone-theme [class*='bg-violet-'],
+.payzone-theme [class*='bg-green-'],
+.payzone-theme [class*='bg-red-'],
+.payzone-theme [class*='bg-orange-'],
+.payzone-theme [class*='bg-yellow-'],
+.payzone-theme [class*='bg-pink-'],
+.payzone-theme [class*='bg-indigo-'],
+.payzone-theme [class*='bg-emerald-'],
+.payzone-theme [class*='bg-amber-'],
+.payzone-theme [class*='bg-rose-'],
+.payzone-theme [class*='bg-lime-'],
+.payzone-theme [class*='bg-sky-'],
+.payzone-theme [class*='bg-teal-'],
+.payzone-theme [class*='bg-fuchsia-'] {
+  background-color: var(--primary);
+  background-image: none;
+}
+
+.payzone-theme [class*='border-blue-'],
+.payzone-theme [class*='border-cyan-'],
+.payzone-theme [class*='border-purple-'],
+.payzone-theme [class*='border-violet-'],
+.payzone-theme [class*='border-green-'],
+.payzone-theme [class*='border-red-'],
+.payzone-theme [class*='border-orange-'],
+.payzone-theme [class*='border-yellow-'],
+.payzone-theme [class*='border-pink-'],
+.payzone-theme [class*='border-indigo-'],
+.payzone-theme [class*='border-emerald-'],
+.payzone-theme [class*='border-amber-'],
+.payzone-theme [class*='border-rose-'],
+.payzone-theme [class*='border-lime-'],
+.payzone-theme [class*='border-sky-'],
+.payzone-theme [class*='border-teal-'],
+.payzone-theme [class*='border-fuchsia-'] {
+  border-color: var(--border);
+}
+
+.payzone-theme [class*='text-white'] {
+  color: var(--foreground);
+}
+
+.payzone-theme [class*='bg-blue-'][class*='text-white'],
+.payzone-theme [class*='bg-cyan-'][class*='text-white'],
+.payzone-theme [class*='bg-purple-'][class*='text-white'],
+.payzone-theme [class*='bg-violet-'][class*='text-white'],
+.payzone-theme [class*='bg-green-'][class*='text-white'],
+.payzone-theme [class*='bg-red-'][class*='text-white'],
+.payzone-theme [class*='bg-orange-'][class*='text-white'],
+.payzone-theme [class*='bg-yellow-'][class*='text-white'],
+.payzone-theme [class*='bg-pink-'][class*='text-white'],
+.payzone-theme [class*='bg-indigo-'][class*='text-white'],
+.payzone-theme [class*='bg-emerald-'][class*='text-white'],
+.payzone-theme [class*='bg-amber-'][class*='text-white'],
+.payzone-theme [class*='bg-rose-'][class*='text-white'],
+.payzone-theme [class*='bg-lime-'][class*='text-white'],
+.payzone-theme [class*='bg-sky-'][class*='text-white'],
+.payzone-theme [class*='bg-teal-'][class*='text-white'],
+.payzone-theme [class*='bg-fuchsia-'][class*='text-white'] {
+  color: var(--primary-foreground);
+}
+
+.payzone-theme [class*='from-'],
+.payzone-theme [class*='via-'],
+.payzone-theme [class*='to-'],
+.payzone-theme [class*='bg-gradient'],
+.payzone-theme [class*='bg-['] {
+  background-image: none;
+  background-color: var(--card);
+}
+
+.payzone-theme [class*='shadow-['] {
+  box-shadow: var(--shadow);
+}
+
+/* Legacy dashboard status and chart utilities render through grayscale tokens. */
+[class*='text-blue-'],
+[class*='text-cyan-'],
+[class*='text-purple-'],
+[class*='text-violet-'],
+[class*='text-green-'],
+[class*='text-red-'],
+[class*='text-orange-'],
+[class*='text-yellow-'],
+[class*='text-pink-'],
+[class*='text-indigo-'],
+[class*='text-emerald-'],
+[class*='text-amber-'],
+[class*='text-rose-'],
+[class*='text-lime-'],
+[class*='text-sky-'],
+[class*='text-teal-'],
+[class*='text-fuchsia-'] {
+  color: var(--foreground);
+}
+
+[class*='bg-blue-'],
+[class*='bg-cyan-'],
+[class*='bg-purple-'],
+[class*='bg-violet-'],
+[class*='bg-green-'],
+[class*='bg-red-'],
+[class*='bg-orange-'],
+[class*='bg-yellow-'],
+[class*='bg-pink-'],
+[class*='bg-indigo-'],
+[class*='bg-emerald-'],
+[class*='bg-amber-'],
+[class*='bg-rose-'],
+[class*='bg-lime-'],
+[class*='bg-sky-'],
+[class*='bg-teal-'],
+[class*='bg-fuchsia-'] {
+  background-color: var(--muted);
+  background-image: none;
+}
+
+[class*='border-blue-'],
+[class*='border-cyan-'],
+[class*='border-purple-'],
+[class*='border-violet-'],
+[class*='border-green-'],
+[class*='border-red-'],
+[class*='border-orange-'],
+[class*='border-yellow-'],
+[class*='border-pink-'],
+[class*='border-indigo-'],
+[class*='border-emerald-'],
+[class*='border-amber-'],
+[class*='border-rose-'],
+[class*='border-lime-'],
+[class*='border-sky-'],
+[class*='border-teal-'],
+[class*='border-fuchsia-'] {
+  border-color: var(--border);
+}
+
+[class*='from-'],
+[class*='via-'],
+[class*='to-'],
+[class*='bg-gradient'],
+[class*='bg-['] {
+  background-image: none;
+  background-color: var(--card);
+}
+
+[class*='shadow-['] {
+  box-shadow: var(--shadow);
+}
+
+[data-slot='chart'] .recharts-sector,
+[data-slot='chart'] .recharts-rectangle,
+[data-slot='chart'] .recharts-area-area,
+[data-slot='chart'] .recharts-line-curve,
+[data-slot='chart'] .recharts-bar-rectangle {
+  filter: grayscale(1) !important;
+}
+
+:root {
+  --header-height: calc(var(--spacing, 0.25rem) * 12 + 1px);
+}
+
+/* Use the existing Next.js-loaded Geist variable everywhere, including legacy
+   components that opt into mono or theme-specific font utilities. */
+*,
+*::before,
+*::after {
+  font-family: var(--font-sans), sans-serif !important;
+}
+
+/* Shared typography scale for dashboard and PayZone content. */
+body {
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+
+h1 {
+  font-size: 2.25rem !important;
+  line-height: 2.5rem !important;
+  font-weight: 700 !important;
+}
+
+h2 {
+  font-size: 1.875rem !important;
+  line-height: 2.25rem !important;
+  font-weight: 700 !important;
+}
+
+h3 {
+  font-size: 1.5rem !important;
+  line-height: 2rem !important;
+  font-weight: 600 !important;
+}
+
+h4,
+h5,
+h6 {
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
+  font-weight: 600 !important;
+}
+
+p,
+label,
+button,
+input,
+textarea,
+select,
+table {
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+
+p,
+label,
+input,
+textarea,
+select {
+  font-weight: 400 !important;
+}
+
+button {
+  font-weight: 500 !important;
+}

@@ -1,0 +1,33 @@
+{
+  "network": "Arc Testnet",
+  "chainId": 5042002,
+  "owner": "0x20EB9790C5dfc744103f8F870236493514C295D1",
+  "audc": {
+    "address": "0x3d28BA614DFf368BDfaA587ae7D7FcDF4934A406",
+    "txHash": "0xa124426591a6087358aaeca88dcb78ee0391914a0524a88260407836707c8bcb",
+    "blockNumber": 58135422,
+    "decimals": 18,
+    "initialSupply": "1000000"
+  },
+  "staking": {
+    "address": "0x4715262e64AA5E16851498cD5CaB5aE1f9C8366d",
+    "txHash": "0x8510fde510e9397b97b0aa5fb4a007f5630be0fe431f89b05d677af3187bf31d",
+    "blockNumber": 58135425,
+    "rewardFunding": "100000",
+    "fundingTxHash": "0x2f00d40d293df3567350f253faad2cdf80ea560f8a01290adb3272b42bda1dd5"
+  },
+  "usdc": {
+    "address": "0x3600000000000000000000000000000000000000",
+    "decimals": 6,
+    "poolId": 0,
+    "rewardRate": "0.00000001",
+    "initializationTx": "0x90fc1c7058d3fa03fda0ef5430315e026e7ccf9d4809caf7e87c15219dfb97aa"
+  },
+  "eurc": {
+    "address": "0x89B50855Aa3bE2F677cD6303Cec089B5F319D72a",
+    "decimals": 6,
+    "poolId": 1,
+    "rewardRate": "0.00000001",
+    "initializationTx": "0xa77aa9e23bcf6972ff8191d38843e77ba806c333492c01c7b720542a98331bee"
+  }
+}

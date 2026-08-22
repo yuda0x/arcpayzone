@@ -1,0 +1,302 @@
+import { ethers } from "ethers";
+
+export const ARC_NATIVE_USDC_ADDRESS = "0x3600000000000000000000000000000000000000";
+export const ARC_NATIVE_USDC_DECIMALS = 18;
+export const ARC_USDC_TOKEN_DECIMALS = 6;
+export const ARC_NATIVE_USDC_SYMBOL = "USDC";
+
+export const DAILY_GM_ADDRESS = "0x38e1458db96272B23c270AC2428f849D8b7611AD";
+export const DAILY_GM_ABI = [
+  "function checkIn() external",
+  "function lastCheckIn(address) external view returns (uint256)",
+  "function streak(address) external view returns (uint256)"
+];
+
+export const USDC_ADDRESS = ARC_NATIVE_USDC_ADDRESS;
+export const USDC_DECIMALS_FALLBACK = ARC_USDC_TOKEN_DECIMALS;
+export const EURC_DECIMALS_FALLBACK = 6;
+export const FACTORY_ADDRESS = "0x7cC023C7184810B84657D55c1943eBfF8603B72B";
+export const ROUTER_ADDRESS = "0xB92428D440c335546b69138F7fAF689F5ba8D436";
+export const ARC_RPC_URL = "https://rpc.testnet.arc.io";
+export const ARC_CHAIN_ID = 5042002;
+
+export const ASSET_DECIMALS = {
+  usdc: USDC_DECIMALS_FALLBACK,
+  eurc: EURC_DECIMALS_FALLBACK,
+} as const;
+
+export const BALANCE_CACHE_MS = 30_000;
+
+let arcReadProvider: ethers.JsonRpcProvider | null = null;
+
+export function getArcReadProvider(): ethers.JsonRpcProvider {
+  if (!arcReadProvider) {
+    arcReadProvider = new ethers.JsonRpcProvider(ARC_RPC_URL, ARC_CHAIN_ID, { staticNetwork: true });
+  }
+  return arcReadProvider;
+}
+
+export const USDC_DECIMALS = USDC_DECIMALS_FALLBACK;
+export const EURC_DECIMALS = EURC_DECIMALS_FALLBACK;
+export const LP_DECIMALS = 18;
+
+export async function getTokenDecimals(
+  provider: ethers.Provider,
+  tokenAddress: string,
+  fallback: number
+): Promise<number> {
+  try {
+    const token = new ethers.Contract(
+      tokenAddress,
+      ["function decimals() view returns (uint8)"],
+      provider
+    );
+    const decimals = await token.decimals();
+    const value = Number(decimals);
+    return Number.isFinite(value) && value >= 0 ? value : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+export const DEFAULT_SLIPPAGE_BPS = 100;
+export const SLIPPAGE_PRESETS = [50, 100, 300] as const;
+export const DEADLINE_SECONDS = 20 * 60;
+export const NATIVE_GAS_BUFFER = ethers.parseUnits("0.02", ARC_NATIVE_USDC_DECIMALS);
+
+export const ERC20_ABI = [
+  "function name() view returns (string)",
+  "function symbol() view returns (string)",
+  "function decimals() view returns (uint8)",
+  "function balanceOf(address owner) view returns (uint256)",
+  "function allowance(address owner, address spender) view returns (uint256)",
+  "function approve(address spender, uint256 amount) returns (bool)",
+  "function transfer(address to, uint256 amount) returns (bool)",
+];
+
+export const FACTORY_ABI = [
+  "function getPair(address tokenA, address tokenB) view returns (address pair)",
+  "function allPairs(uint256) view returns (address pair)",
+  "function allPairsLength() view returns (uint256)",
+  "function createPair(address tokenA, address tokenB) returns (address pair)",
+];
+
+export const ROUTER_ABI = [
+  "function factory() view returns (address)",
+  "function WETH() view returns (address)",
+  "function getAmountsOut(uint256 amountIn, address[] path) view returns (uint256[] amounts)",
+  "function getAmountsIn(uint256 amountOut, address[] path) view returns (uint256[] amounts)",
+  "function quote(uint256 amountA, uint256 reserveA, uint256 reserveB) pure returns (uint256 amountB)",
+  "function swapExactETHForTokens(uint256 amountOutMin, address[] path, address to, uint256 deadline) payable returns (uint256[] amounts)",
+  "function swapExactTokensForETH(uint256 amountIn, uint256 amountOutMin, address[] path, address to, uint256 deadline) returns (uint256[] amounts)",
+  "function swapExactTokensForTokens(uint256 amountIn, uint256 amountOutMin, address[] path, address to, uint256 deadline) returns (uint256[] amounts)",
+  "function addLiquidityETH(address token, uint256 amountTokenDesired, uint256 amountTokenMin, uint256 amountETHMin, address to, uint256 deadline) payable returns (uint256 amountToken, uint256 amountETH, uint256 liquidity)",
+  "function removeLiquidityETH(address token, uint256 liquidity, uint256 amountTokenMin, uint256 amountETHMin, address to, uint256 deadline) returns (uint256 amountToken, uint256 amountETH)",
+  "function addLiquidity(address tokenA, address tokenB, uint256 amountADesired, uint256 amountBDesired, uint256 amountAMin, uint256 amountBMin, address to, uint256 deadline) returns (uint256 amountA, uint256 amountB, uint256 liquidity)",
+  "function removeLiquidity(address tokenA, address tokenB, uint256 liquidity, uint256 amountAMin, uint256 amountBMin, address to, uint256 deadline) returns (uint256 amountA, uint256 amountB)",
+];
+
+export const PAIR_ABI = [
+  "function token0() view returns (address)",
+  "function token1() view returns (address)",
+  "function getReserves() view returns (uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast)",
+  "function totalSupply() view returns (uint256)",
+  "function balanceOf(address owner) view returns (uint256)",
+  "function allowance(address owner, address spender) view returns (uint256)",
+  "function approve(address spender, uint256 amount) returns (bool)",
+  "function decimals() view returns (uint8)",
+];
+
+export type PairReserves = {
+  pairAddress: string;
+  token0: string;
+  reserveUsdc: bigint;
+  reserveEurc: bigint;
+  totalSupply: bigint;
+};
+
+export function swapDeadline(): number {
+  return Math.floor(Date.now() / 1000) + DEADLINE_SECONDS;
+}
+
+export function applySlippage(amount: bigint, bps: number = DEFAULT_SLIPPAGE_BPS): bigint {
+  if (amount <= BigInt(0)) return BigInt(0);
+  const bpsBig = BigInt(Math.max(0, Math.min(5000, Math.round(bps))));
+  return amount - (amount * bpsBig) / BigInt(10000);
+}
+
+export function formatExact(value: bigint, decimals: number): string {
+  return ethers.formatUnits(value, decimals);
+}
+
+export function trimZeros(value: string): string {
+  if (!value.includes(".")) return value;
+  const trimmed = value.replace(/(\.\d*?)0+$/, "$1").replace(/\.$/, "");
+  return trimmed.length ? trimmed : "0";
+}
+
+export function formatPretty(value: bigint, decimals: number, maxFrac = 6): string {
+  if (value === BigInt(0)) return "0.00";
+  const exact = ethers.formatUnits(value, decimals);
+  const negative = exact.startsWith("-");
+  const unsigned = negative ? exact.slice(1) : exact;
+  const [whole, frac = ""] = unsigned.split(".");
+  let cut = maxFrac;
+  if (whole === "0") {
+    const firstNz = frac.search(/[1-9]/);
+    if (firstNz === -1) return "0.00";
+    cut = Math.min(decimals, Math.max(maxFrac, firstNz + 2));
+  }
+  const sliced = frac.slice(0, cut).replace(/0+$/, "");
+  const body = sliced ? `${whole}.${sliced}` : `${whole}.00`;
+  return negative ? `-${body}` : body;
+}
+
+export function formatDisplay(value: bigint, decimals: number, digits = 2): string {
+  return formatPretty(value, decimals, digits);
+}
+
+export function formatAmount(value: bigint, decimals: number, digits = 6): string {
+  return formatPretty(value, decimals, digits);
+}
+
+export function isAmountDraft(input: string): boolean {
+  const cleaned = input.trim();
+  return cleaned === "" || cleaned === "." || cleaned.endsWith(".");
+}
+
+export function parseAmount(input: string, decimals: number): bigint | null {
+  const cleaned = input.trim();
+  if (!cleaned || cleaned === "." || cleaned === "0.") return null;
+  if (!/^\d+(\.\d+)?$/.test(cleaned)) return null;
+  try {
+    const [whole, frac = ""] = cleaned.split(".");
+    const clipped = frac.length > decimals ? `${whole}.${frac.slice(0, decimals)}` : cleaned;
+    return ethers.parseUnits(clipped, decimals);
+  } catch {
+    return null;
+  }
+}
+
+export function maxNativeSpend(balance: bigint, buffer: bigint = NATIVE_GAS_BUFFER): bigint {
+  return balance > buffer ? balance - buffer : BigInt(0);
+}
+
+export function formatSharePercent(part: bigint, total: bigint): string {
+  if (total === BigInt(0) || part === BigInt(0)) return "0";
+  const scaled = (part * BigInt(100000000)) / total;
+  if (scaled === BigInt(0)) return "<0.000001";
+  return trimZeros(ethers.formatUnits(scaled, 6));
+}
+
+export function slippageLabel(bps: number): string {
+  return `${(bps / 100).toString()}%`;
+}
+
+export function getTxErrorMessage(error: unknown): string {
+  const err = error as {
+    code?: string | number;
+    shortMessage?: string;
+    reason?: string;
+    message?: string;
+    info?: { error?: { message?: string } };
+  };
+
+  if (err?.code === 4001 || err?.code === "ACTION_REJECTED") {
+    return "Transaction rejected in wallet";
+  }
+
+  const raw =
+    err?.shortMessage ||
+    err?.reason ||
+    err?.info?.error?.message ||
+    err?.message ||
+    "Transaction failed";
+
+  const cleaned = raw
+    .replace(/^execution reverted:\s*/i, "")
+    .replace(/^Error:\s*/i, "")
+    .replace(/\(action="[^"]*",[^)]*\)/g, "")
+    .trim();
+
+  if (/INSUFFICIENT_OUTPUT_AMOUNT/i.test(cleaned)) return "Quote moved. Try a smaller amount or retry.";
+  if (/INSUFFICIENT_LIQUIDITY/i.test(cleaned)) return "Insufficient pool liquidity for this amount.";
+  if (/INSUFFICIENT_A_AMOUNT|INSUFFICIENT_B_AMOUNT/i.test(cleaned)) return "Amount slipped. Retry the transaction.";
+  if (/INSUFFICIENT_INPUT|insufficient funds|insufficient balance/i.test(cleaned)) return "Insufficient balance.";
+  if (/EXPIRED/i.test(cleaned)) return "Transaction expired. Please try again.";
+  if (/user rejected|denied transaction|rejected the request/i.test(cleaned)) return "Transaction rejected in wallet";
+  if (/missing revert data|CALL_EXCEPTION|could not coalesce|UNPREDICTABLE_GAS/i.test(cleaned)) {
+    return "Network call failed. Confirm you are on Arc Testnet and try again.";
+  }
+
+  return cleaned.slice(0, 160) || "Transaction failed";
+}
+
+let pairCache: { eurc: string; at: number; state: PairReserves | null } | null = null;
+
+export function invalidatePairCache() {
+  pairCache = null;
+}
+
+export async function fetchPairState(
+  provider: ethers.Provider,
+  eurcAddress: string,
+  options?: { force?: boolean }
+): Promise<PairReserves | null> {
+  const key = eurcAddress.toLowerCase();
+  if (
+    !options?.force &&
+    pairCache &&
+    pairCache.eurc === key &&
+    Date.now() - pairCache.at < BALANCE_CACHE_MS
+  ) {
+    return pairCache.state;
+  }
+
+  const factory = new ethers.Contract(FACTORY_ADDRESS, FACTORY_ABI, provider);
+  const pairAddress = (await factory.getPair(USDC_ADDRESS, eurcAddress)) as string;
+  if (!pairAddress || pairAddress === ethers.ZeroAddress) {
+    pairCache = { eurc: key, at: Date.now(), state: null };
+    return null;
+  }
+
+  const pair = new ethers.Contract(pairAddress, PAIR_ABI, provider);
+  const [token0, reserves, totalSupply] = await Promise.all([
+    pair.token0() as Promise<string>,
+    pair.getReserves() as Promise<{ reserve0: bigint; reserve1: bigint }>,
+    pair.totalSupply() as Promise<bigint>,
+  ]);
+
+  const token0Lower = token0.toLowerCase();
+  const token1Lower = (await pair.token1()).toLowerCase();
+  const usdcLower = USDC_ADDRESS.toLowerCase();
+  const eurcLower = eurcAddress.toLowerCase();
+  if (!((token0Lower === usdcLower && token1Lower === eurcLower) || (token0Lower === eurcLower && token1Lower === usdcLower))) {
+    pairCache = { eurc: key, at: Date.now(), state: null };
+    return null;
+  }
+
+  const token0IsEurc = token0Lower === eurcLower;
+  const state: PairReserves = {
+    pairAddress,
+    token0,
+    reserveEurc: token0IsEurc ? reserves.reserve0 : reserves.reserve1,
+    reserveUsdc: token0IsEurc ? reserves.reserve1 : reserves.reserve0,
+    totalSupply,
+  };
+  pairCache = { eurc: key, at: Date.now(), state };
+  return state;
+}
+
+export function underlyingFromLp(
+  lpAmount: bigint,
+  totalSupply: bigint,
+  reserveUsdc: bigint,
+  reserveEurc: bigint
+): { usdc: bigint; eurc: bigint } {
+  if (totalSupply === BigInt(0) || lpAmount === BigInt(0)) return { usdc: BigInt(0), eurc: BigInt(0) };
+  return {
+    usdc: (lpAmount * reserveUsdc) / totalSupply,
+    eurc: (lpAmount * reserveEurc) / totalSupply,
+  };
+}
